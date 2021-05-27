@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   random_num.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arrigo <arrigo@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 09:38:22 by aviolini          #+#    #+#             */
-/*   Updated: 2021/05/27 07:22:23 by arrigo           ###   ########.fr       */
+/*   Updated: 2021/05/27 08:13:29 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-#define MAX 10
+#define MAX 1000
 
 int main (int ac, char **av)
 {
