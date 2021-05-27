@@ -6,7 +6,7 @@
 /*   By: arrigo <arrigo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 09:38:22 by aviolini          #+#    #+#             */
-/*   Updated: 2021/05/26 13:14:56 by arrigo           ###   ########.fr       */
+/*   Updated: 2021/05/27 07:22:23 by arrigo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,42 +15,34 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-#define MAX 1000
+#define MAX 10
 
 int main (int ac, char **av)
 {
  	int		i, n, num, x;
    	time_t	t;
 	int		*numbers;
-	
-	x = -1;
-	i = -1;
+
 	if (ac != 2)
-		return (0);
+		return (1);
 	n = atoi(av[1]);
 	if (n > MAX)
 		return (printf("Error, limit is %d\n", MAX));
 	numbers = (int *)malloc(sizeof(int) * n);
 	srand((unsigned) time(&t));
+	i = -1;
 	while (++i < n)
 	{
 		num = rand() % MAX;
 		numbers[i] = num;
 		x = -1;
-		while (++x < (i))
-		{
+		while (++x < i)
 			if (num == numbers[x])
-			{
-				i--;
-				break ;
-			}
-		}
+				x = i--;
 	}
 	i = -1;
 	while (++i < n)
-	{
 		printf("%d ", numbers[i]);
-	}
 	free(numbers);
-	return (1);
+	return (0);
 }
