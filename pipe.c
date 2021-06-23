@@ -28,6 +28,16 @@ int close_all_fd_pipe(int ***fd_pipe, int num)
 	return (0);
 }
 
+int close_all_fd_pipe_2(int **fd_pipe)
+{
+	close(fd_pipe[0][0]);
+	close(fd_pipe[0][1]);
+	close(fd_pipe[1][0]);
+	close(fd_pipe[1][1]);
+	close(fd_pipe[2][0]);
+	close(fd_pipe[2][1]);
+}
+
 
 int two_pipes(int ac, char **av)
 {
@@ -40,7 +50,7 @@ int two_pipes(int ac, char **av)
 	num_pipes = 3;
 	fd[0] = dup(0);
 	fd[1] = dup(1);
-	fd_pipe = (int **)malloc(sizeof(int *) * num_pipes);
+	fd_pipe = (int **)malloc(sizeof(int *) * (num_pipes-1));
 	i = -1;
 	while (++i < num_pipes)
 		fd_pipe[i] = (int *)malloc(sizeof(int) * 2);
@@ -66,45 +76,52 @@ int two_pipes(int ac, char **av)
 		waitpid(pid, NULL, 0);
 		write(fd[1], "Start_1\n", 8);	
 		i = -1;
-		while (++i < num_pipes - 1)
+		while (++i < num_pipes )
 		{
 			write(fd[1], "prefork\n", 8);
+			printf("i:%d\n", i);
 			pid = fork();
 			if (pid == 0)
 			{
-				write(fd[1], "Child_2\n", 8);
-				dup2(fd_pipe[i][0], 0);
-				dup2(fd_pipe[i+1][1], 1);
-				close_all_fd_pipe(&fd_pipe, num_pipes);			
+				write(fd[1], "Child_2\n", 8);		
 				if (i == 0)
-				{
+				{	
+					dup2(fd_pipe[i][0], 0);	
+					dup2(fd_pipe[i+1][1], 1);
+					printf(" ciao1\n");
+					close_all_fd_pipe(&fd_pipe, num_pipes);	
 					write(fd[1], "Execlp_1\n", 9);
 					execlp(av[2], av[2], av[3], NULL);
 					write(fd[1], "Failed_2\n", 9);		
 				}
 				if (i == 1)
 				{
+					dup2(fd_pipe[i][0], 0);	
+					dup2(fd_pipe[i+1][1], 1);
+					close_all_fd_pipe(&fd_pipe, num_pipes);
+					printf(" ciao2\n");
 					write(fd[1], "Execlp_2\n", 9);
 					execlp(av[4], av[4], av[5], NULL);
 					write(fd[1], "Failed_3\n", 9);			
+				}
+				if (i == 2)
+				{
+					write(fd[1], "Last_Child\n", 11);
+					dup2(fd_pipe[i][0], 0);	
+					close_all_fd_pipe(&fd_pipe, num_pipes);
+					execlp(av[6], av[6], av[7], NULL);
+					write(fd[1], "Failed_3\n", 9);		
 				}
 			}
 			else 
 			{
 				close_all_fd_pipe(&fd_pipe, num_pipes);
-				write(fd[1], "Wait_2\n", 7);	
-				waitpid(pid, NULL, 0);
+				write(fd[1], "Wait_2\n", 7);
+				wait(NULL);
 				write(fd[1], "Exit_parent\n", 12);
-				// exit(0);
+				if (i == 1)
+					return(0);
 			}
-		}
-		if (i == num_pipes-1)
-		{
-			write(fd[1], "Last_Child\n", 11);
-			dup2(fd_pipe[2][0], 0);
-			close_all_fd_pipe(&fd_pipe, num_pipes);
-			execlp(av[6], av[6], av[7], NULL);
-			write(fd[1], "Failed_3\n", 9);		
 		}
 	}
 	return (0);
