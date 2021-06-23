@@ -28,44 +28,6 @@ int close_all_fd_pipe(int ***fd_pipe, int num)
 	return (0);
 }
 
-int close_fd_pipe(int ***fd_pipe, int num, int index, int type)
-{
-	int i;
-	int x;
-
-	i = -1;
-	while (++i < num)
-	{
-		x = -1;
-		while (++x < 2)
-			if (i == index && x == type)
-			{	}
-			else
-				close((*fd_pipe)[i][x]);
-	}
-	return (0);
-}
-
-int close_fd_pipe_special(int ***fd_pipe, int num, int index)
-{
-	int i;
-	int x;
-
-	i = -1;
-	while (++i < num)
-	{
-		x = -1;
-		while (++x < 2)
-		{
-			if ((i == index && x == 0) || (i == index+1 && x == 1))
-				continue ;
-			else
-				close((*fd_pipe)[i][x]);
-		}
-	}
-	return (0);
-}
-
 
 int two_pipes(int ac, char **av)
 {
@@ -89,9 +51,8 @@ int two_pipes(int ac, char **av)
 	if (pid == 0)
 	{
 		write(fd[1], "Child_1\n", 8);
-		close_fd_pipe(&fd_pipe, num_pipes, 0, 1);
 		dup2(fd_pipe[0][1], 1);
-		close(fd_pipe[0][1]);
+		close_all_fd_pipe(&fd_pipe, num_pipes);
 		execlp(av[1], av[1], NULL);
 		write(fd[1], "Failed_1\n", 9);
 	}
@@ -112,11 +73,9 @@ int two_pipes(int ac, char **av)
 			if (pid == 0)
 			{
 				write(fd[1], "Child_2\n", 8);
-				close_fd_pipe_special(&fd_pipe, num_pipes, i);				
 				dup2(fd_pipe[i][0], 0);
-				close(fd_pipe[i][0]);
 				dup2(fd_pipe[i+1][1], 1);
-				close(fd_pipe[i+1][1]);
+				close_all_fd_pipe(&fd_pipe, num_pipes);			
 				if (i == 0)
 				{
 					write(fd[1], "Execlp_1\n", 9);
@@ -142,11 +101,8 @@ int two_pipes(int ac, char **av)
 		if (i == num_pipes-1)
 		{
 			write(fd[1], "Last_Child\n", 11);
-			close_fd_pipe(&fd_pipe, num_pipes, 2, 0);
 			dup2(fd_pipe[2][0], 0);
-			close(fd_pipe[2][0]);
-			// execlp(av[1], av[1], NULL);
-			// write(fd[1], "Failed_1\n", 7);
+			close_all_fd_pipe(&fd_pipe, num_pipes);
 			execlp(av[6], av[6], av[7], NULL);
 			write(fd[1], "Failed_3\n", 9);		
 		}
