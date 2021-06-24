@@ -28,102 +28,77 @@ int close_all_fd_pipe(int ***fd_pipe, int num)
 	return (0);
 }
 
-int close_all_fd_pipe_2(int **fd_pipe)
-{
-	close(fd_pipe[0][0]);
-	close(fd_pipe[0][1]);
-	close(fd_pipe[1][0]);
-	close(fd_pipe[1][1]);
-	close(fd_pipe[2][0]);
-	close(fd_pipe[2][1]);
-}
 
 
-int two_pipes(int ac, char **av)
+
+int three_pipes(int ac, char **av)
 {
 	int pid;
 	int num_pipes;
 	int fd[2];
 	int i;
+	int x;
 	int **fd_pipe;
 
 	num_pipes = 3;
 	fd[0] = dup(0);
 	fd[1] = dup(1);
-	fd_pipe = (int **)malloc(sizeof(int *) * (num_pipes-1));
+	fd_pipe = (int **)malloc(sizeof(int *) * (num_pipes));
 	i = -1;
 	while (++i < num_pipes)
 		fd_pipe[i] = (int *)malloc(sizeof(int) * 2);
 	i = -1;
 	while (++i < num_pipes)
 		pipe(fd_pipe[i]);
-	pid  = fork();
-	if (pid == 0)
+	i = -1;
+	while (++i <= num_pipes)
 	{
-		write(fd[1], "Child_1\n", 8);
-		dup2(fd_pipe[0][1], 1);
-		close_all_fd_pipe(&fd_pipe, num_pipes);
-		execlp(av[1], av[1], NULL);
-		write(fd[1], "Failed_1\n", 9);
-	}
-	else
-	{
-		//	a.out	ls		grep 	o 		grep 	a 		wc 		-l
-		// av[0]	av[1]	av[2]	av[3]	av[4]	av[5]	av[6]	av[7]
-
-		// close_all_fd_pipe(&fd_pipe, num_args);
-		write(fd[1], "Wait_1\n", 7);	
-		waitpid(pid, NULL, 0);
-		write(fd[1], "Start_1\n", 8);	
-		i = -1;
-		while (++i < num_pipes )
+		pid = fork();
+		printf("i:%d\n", i);
+		if (pid == 0)
 		{
-			write(fd[1], "prefork\n", 8);
-			printf("i:%d\n", i);
-			pid = fork();
-			if (pid == 0)
+			if (i != 0)
+				if (dup2(fd_pipe[i-1][0], 0) < 0)
+					write(fd[1], "Error_1\n", 8);
+			if (i != num_pipes)
 			{
-				write(fd[1], "Child_2\n", 8);		
-				if (i == 0)
-				{	
-					dup2(fd_pipe[i][0], 0);	
-					dup2(fd_pipe[i+1][1], 1);
-					printf(" ciao1\n");
-					close_all_fd_pipe(&fd_pipe, num_pipes);	
-					write(fd[1], "Execlp_1\n", 9);
-					execlp(av[2], av[2], av[3], NULL);
-					write(fd[1], "Failed_2\n", 9);		
-				}
-				if (i == 1)
-				{
-					dup2(fd_pipe[i][0], 0);	
-					dup2(fd_pipe[i+1][1], 1);
-					close_all_fd_pipe(&fd_pipe, num_pipes);
-					printf(" ciao2\n");
-					write(fd[1], "Execlp_2\n", 9);
-					execlp(av[4], av[4], av[5], NULL);
-					write(fd[1], "Failed_3\n", 9);			
-				}
-				if (i == 2)
-				{
-					write(fd[1], "Last_Child\n", 11);
-					dup2(fd_pipe[i][0], 0);	
-					close_all_fd_pipe(&fd_pipe, num_pipes);
-					execlp(av[6], av[6], av[7], NULL);
-					write(fd[1], "Failed_3\n", 9);		
-				}
+				if (dup2(fd_pipe[i][1],1) < 0)
+					write(fd[1], "Error_2\n", 8);
 			}
-			else 
+			// else
+			// 	if (dup2(fd[1], 1) < 0)
+			// 		write(fd[1], "Error_3\n", 8);
+			close_all_fd_pipe(&fd_pipe, num_pipes);
+			// close_all_fd_pipe_2(fd_pipe);
+			if (i == 0)
 			{
-				close_all_fd_pipe(&fd_pipe, num_pipes);
-				write(fd[1], "Wait_2\n", 7);
-				wait(NULL);
-				write(fd[1], "Exit_parent\n", 12);
-				if (i == 1)
-					return(0);
+				execlp(av[1], av[1], NULL);
+				write(fd[1], "Failed\n", 7);
+			}
+			if (i == 1)
+			{
+				execlp(av[2],av[2],  av[3], NULL);
+				write(fd[1], "Failed\n", 7);
+			}
+			if (i == 2)
+			{
+				execlp(av[4], av[4], av[5], NULL);
+				write(fd[1], "Failed\n", 7);
+			}
+			if (i == 3)
+			{
+				execlp(av[6], av[6], av[7], NULL);
+				write(fd[1], "Failed\n", 7);
 			}
 		}
 	}
+	// close_all_fd_pipe_2(fd_pipe);
+	close_all_fd_pipe(&fd_pipe, num_pipes);
+	x = -1;
+	while (++x < num_pipes)
+			wait(NULL);
+	// printf("z:%d\n", z);
+	// write(fd[1], "Exit parent\n", 12);
 	return (0);
 }
 
@@ -226,7 +201,8 @@ int main(int ac, char **av)
 {
 	//one_pipe_one_fork(ac,av);				//	a.out ls grep a
 	// one_pipe_two_forks(ac,av);			//	a.out ls grep a
-	two_pipes(ac,av);						//	a.out	ls		grep 	o 		grep 	a 		wc		-l
-											// av[0]	av[1]	av[2]	av[3]	av[4]	av[5]	av[6]	av[7]
+	// three_pipes(ac,av);						//	a.out	ls		grep 	o 		grep 	a 		wc		-l
+												// av[0]	av[1]	av[2]	av[3]	av[4]	av[5]	av[6]	av[7]
+	multi_pipes(ac,av);
 	return (0);
 }
