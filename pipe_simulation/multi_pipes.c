@@ -18,38 +18,30 @@ int	main(int ac, char **av)
 
 char ***find_commands(int num_pipes, char **av)
 {
-	int i;
-	int x;
+	int i = 0;
+	int x = 0;
+	int z = 0;
 	int y;
-	int z;
 	char ***commands;
-	commands = (char ***)malloc(sizeof(char **) * (num_pipes + 2));
-	x = 0;
-	z = 0;
-	i = 0;
+
+	if (!(commands = (char ***)malloc(sizeof(char **) * (num_pipes + 2))))
+		return (NULL);
 	while (av[i] && av[++i])
-	{
 		if ((av[i][0] == '|' && !(av[i][1])) || (!av[i + 1]))
 		{
-			// printf("av:%s\n",av[i]);
-			// printf("i:%d\tz:%d\n",i,z);
 			if ((!av[i + 1]))
 				i++;
-			commands[x] =(char **)malloc(sizeof(char *) * (i - z + 1));
+			if (!(commands[x] =(char **)malloc(sizeof(char *) * (i - z + 1))))
+				return (NULL);
 			y = 0;
 			z++;
 			while (z < i)
-			{
-				commands[x][y] = ft_strdup(av[z]);
-				// printf("av_strdup:%s\n",av[z]);			
-				y++;
-				z++;
-			}
+				if (!(commands[x][y++] = ft_strdup(av[z++])))
+					return(NULL);
 			commands[x][y] = NULL;
 			z = i;
 			x++;
 		}
-	}
 	commands[x] = NULL;
 	return (commands);
 }

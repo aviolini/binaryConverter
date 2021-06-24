@@ -12,4 +12,4 @@ echo
 echo
 echo testing multi_pipes:
 echo
-gcc -Wall -Wextra -Werror multi_pipes.c tools.c -o multi_pipes && ./multi_pipes ls "|" grep o "|" grep a "|" grep  e "|" wc -l 
+gcc -Wall -Wextra -Werror multi_pipes.c tools.c -o multi_pipes && ./multi_pipes ls "|" grep o "|" grep a "|" grep  e "|" wc -l
