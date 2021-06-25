@@ -77,6 +77,18 @@ int free_commands(char ****commands)
 	return (1);
 }
 
+int free_pipes(int ***pipes, int num)
+{
+	int x;
+
+	x = -1;
+	while (++x < num)
+		free((*pipes)[x]);
+	free(*pipes);
+	*pipes = 0;
+	return (0);
+}
+
 int	num_of_pipes(char **av)
 {
 	int i;
