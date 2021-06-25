@@ -69,8 +69,12 @@ int free_commands(char ****commands)
 	{
 		x = -1;
 		while((*commands)[i][++x])
+		{
 			free((*commands)[i][x]);
+			(*commands)[i][x] = NULL;
+		}
 		free((*commands)[i]);
+		(*commands)[i] = NULL;
 	}
 	free((*commands));
 	*commands = NULL;
@@ -83,7 +87,10 @@ int free_pipes(int ***pipes, int num)
 
 	x = -1;
 	while (++x < num)
+	{
 		free((*pipes)[x]);
+		(*pipes)[x] = 0;
+	}
 	free(*pipes);
 	*pipes = 0;
 	return (0);

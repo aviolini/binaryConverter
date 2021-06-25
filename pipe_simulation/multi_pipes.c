@@ -49,7 +49,7 @@ int	main(int ac, char **av)
 			write(fd[1], "Error_exec\n", 11);
 			free_commands(&commands);
 			free_pipes(&pipe_fd, num_pipes);
-			exit(1);
+			return(1);
 		}
 	}
 	close_all_fd_pipe(&pipe_fd, num_pipes);
