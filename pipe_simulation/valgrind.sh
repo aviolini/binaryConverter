@@ -21,7 +21,7 @@ echo
 echo
 echo testing multi_pipes_list:
 echo
-gcc -Wall -Wextra -Werror multi_pipes_list.c -o multi_pipes_list
+gcc -Wall -Wextra -Werror multi_pipes_list.c tools.c -o multi_pipes_list
 valgrind -s -q --trace-children=yes --leak-check=full --track-fds=all ./multi_pipes_list ls "|" cat -e "|" cat -n "|" cat -t
 
 #--track-fds=all

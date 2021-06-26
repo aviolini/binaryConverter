@@ -47,14 +47,12 @@ int ft_strcmp(char *line, char c)
 int close_all_fd_pipe(int **fd_pipe, int num)
 {
 	int i;
-	int x;
 
 	i = -1;
 	while (++i < num)
 	{
-		x = -1;
-		while (++x < 2)
-			close((fd_pipe)[i][x]);
+		close(fd_pipe[i][0]);
+		close(fd_pipe[i][1]);
 	}	
 	return (0);
 }
@@ -81,19 +79,14 @@ int free_commands(char ****commands)
 	return (1);
 }
 
-int free_pipes(int ***pipes, int num)
+void free_pipes(int **pipes, int num)
 {
-	int x;
+	int i;
 
-	x = -1;
-	while (++x < num)
-	{
-		free((*pipes)[x]);
-		(*pipes)[x] = 0;
-	}
-	free(*pipes);
-	*pipes = 0;
-	return (0);
+	i = -1;
+	while (++i < num)
+		free(pipes[i]);
+	free(pipes);
 }
 
 int	num_of_pipes(char **av)
@@ -124,4 +117,44 @@ int print_commands(char ***commands)
 			printf("commands:%s\n", commands[x][i]);
 	}
 	return(0);
+}
+
+void print_list(t_com **list)
+{
+	t_com *temp;
+	int i;
+
+	printf("-----\n");
+	if (!list || !(*list))
+		printf("Empty list\n");
+	temp = *list;
+	while (temp)
+	{
+		i = -1;
+		while (temp->command[++i])
+			printf("%s\n", temp->command[i]);
+		temp = temp->next;
+		printf("-----\n");
+	}
+}
+
+void free_list(t_com ***list)
+{
+	t_com *temp;
+	t_com *temp2;
+	int i;
+
+	temp = **list;
+	while(temp)
+	{
+		temp2 = temp;
+		temp = temp->next;
+		i = -1;
+		while(temp2->command[++i])
+			free(temp2->command[i]);
+		free(temp2->command);
+		free(temp2);
+	}
+	free(*list);
+	*list = NULL;
 }

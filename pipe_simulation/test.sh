@@ -18,4 +18,4 @@ echo
 echo
 echo testing multi_pipes_list:
 echo
-gcc -Wall -Wextra -Werror multi_pipes_list.c -o multi_pipes_list && ./multi_pipes_list ls "|" cat -e "|" cat -n "|" cat -t #"|" wc -l
+gcc -Wall -Wextra -Werror multi_pipes_list.c tools.c -o multi_pipes_list && ./multi_pipes_list ls "|" cat -e "|" cat -n "|" cat -t #"|" wc -l

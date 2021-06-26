@@ -48,13 +48,13 @@ int	main(int ac, char **av)
 			execvp(commands[i][0], commands[i]);
 			write(fd[1], "Error_exec\n", 11);
 			free_commands(&commands);
-			free_pipes(&pipe_fd, num_pipes);
+			free_pipes(pipe_fd, num_pipes);
 			return(1);
 		}
 	}
 	close_all_fd_pipe(pipe_fd, num_pipes);
 	free_commands(&commands);
-	free_pipes(&pipe_fd, num_pipes);
+	free_pipes(pipe_fd, num_pipes);
 	x = -1;
 	while(++x <= num_pipes)
 		wait(NULL);
