@@ -205,8 +205,8 @@ int main(int ac, char **av)
 		wait(NULL);
 	free_pipes(fd_pipe,num_pipes);
 	free_list(&list);
-	close(0);
 	close(1);
 	close(2);
+	close(0);
 	return (0);
 }
