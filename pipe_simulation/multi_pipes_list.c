@@ -14,16 +14,18 @@ void print_list(t_com **list)
 {
 	t_com *temp;
 	int i;
+
+	printf("-----\n");
 	if (!list || !(*list))
 		printf("Empty list\n");
 	temp = *list;
 	while (temp)
 	{
-		printf("-----\n");
 		i = -1;
 		while (temp->command[++i])
 			printf("%s\n", temp->command[i]);
 		temp = temp->next;
+		printf("-----\n");
 	}
 }
 
@@ -44,6 +46,27 @@ char *ft_strdup(char *line)
 		new[i] = line[i];
 	new[len] = '\0';
 	return(new);
+}
+
+void free_list(t_com ***list)
+{
+	t_com *temp;
+	t_com *temp2;
+	int i;
+
+	temp = **list;
+	while(temp)
+	{
+		temp2 = temp;
+		temp = temp->next;
+		i = -1;
+		while(temp2->command[++i])
+			free(temp2->command[i]);
+		free(temp2->command);
+		free(temp2);
+	}
+	free(*list);
+	*list = NULL;
 }
 
 void free_pipes(int **pipes, int num)
@@ -80,7 +103,7 @@ t_com *set_temp(t_com **list)
 	if (!(*list))
 	{
 		*list = new;
-		new->next = NULL;
+		(*list)->next = NULL;
 		return (*list);
 	}
 	temp = *list;
@@ -88,6 +111,7 @@ t_com *set_temp(t_com **list)
 		temp = temp->next;
 	temp->next = new;
 	new->next = NULL;
+	// print_list(&temp);
 	return(new);
 }
 
@@ -97,28 +121,30 @@ int find_commands(t_com **list, char **av, int num)
 	int x;
 	int z;
 	t_com *temp;
+	(void)num;
 
 	i = 0;
 	x = 1;
 	
-	while (av[++i])
+	while (av[i] && av[++i])
 	{
-		if (av[i][0] == '|' && av[i][1] == '\0')
+		if ((av[i][0] == '|' && av[i][1] == '\0') || !(av[i + 1]))
 		{
-			printf("i:%d\tx:%d\n",i,x);
+			if (!(av[i +1]))
+				i++;
+			// printf("i:%d\tx:%d\n",i,x);
 			temp = set_temp(list);
-			printf("temp:%p\n", temp);
 			temp->command = (char **)malloc(sizeof(char *) * (i - x + 1));
 			// temp->next = NULL;
 			z = -1;
 			while (x < i)
 			{
 				temp->command[++z] = ft_strdup(av[x]);
-				printf("temp->command: %s\n", temp->command[z]);
+				// printf("temp->command: %s\n", temp->command[z]);
 				x++;
 			}
 			x = i + 1;
-			temp->command[z] = NULL;
+			temp->command[++z] = NULL;
 		}
 	}
 	return(0);
@@ -132,7 +158,9 @@ int main(int ac, char **av)
 	int pid;
 	int **fd_pipe;
 	t_com **list;
+	t_com *temp;
 
+	(void)ac;
 	i = -1;
 	num_pipes = 0;
 	while (av[++i])
@@ -150,5 +178,35 @@ int main(int ac, char **av)
 	*list = NULL;
 	find_commands(list, av, num_pipes);
 	print_list(list);
+	temp = *list;
+	i = -1;
+	// while (++i <= num_pipes)
+	while (temp)
+	{
+		i++;
+		pid = fork();
+		if (pid == 0)
+		{
+			if (i != 0)
+				if (dup2(fd_pipe[i -1][0] , 0) < 0)
+					perror("Error_fd:");
+			if (i != num_pipes)
+				if (dup2(fd_pipe[i][1], 1) < 0)
+					perror("Error_fd:");
+			close_fd(fd_pipe, num_pipes);
+			execvp(temp->command[0], temp->command);
+			perror("Exec failed:");
+		}
+		temp = temp->next;
+	}
+	close_fd(fd_pipe, num_pipes);
+	x = -1;
+	while (++x < num_pipes)
+		wait(NULL);
+	free_pipes(fd_pipe,num_pipes);
+	free_list(&list);
+	close(0);
+	close(1);
+	close(2);
 	return (0);
 }
