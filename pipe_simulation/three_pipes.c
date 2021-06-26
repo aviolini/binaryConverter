@@ -38,7 +38,9 @@ int main(int ac, char **av)		//	a.out	ls		grep 	o 		grep 	a 		wc		-l
 			// else
 			// 	if (dup2(fd[1], 1) < 0)
 			// 		write(fd[1], "Error_3\n", 8);
-			close_all_fd_pipe(&fd_pipe, num_pipes);
+			close_all_fd_pipe(fd_pipe, num_pipes);
+			close(fd[0]);
+			close(fd[1]);
 			// close_all_fd_pipe_2(fd_pipe);
 			if (i == 0)
 			{
@@ -63,10 +65,19 @@ int main(int ac, char **av)		//	a.out	ls		grep 	o 		grep 	a 		wc		-l
 		}
 	}
 	// close_all_fd_pipe_2(fd_pipe);
-	close_all_fd_pipe(&fd_pipe, num_pipes);
+	close_all_fd_pipe(fd_pipe, num_pipes);
+	close(fd[0]);
+	close(fd[1]);
 	x = -1;
 	while (++x < num_pipes)
 			wait(NULL);
+	i = -1;
+	while (++i < num_pipes)
+		free(fd_pipe[i]);
+	free(fd_pipe);
+	close(1);
+	close(2);
+	close(0);
 	// printf("z:%d\n", z);
 	// write(fd[1], "Exit parent\n", 12);
 	return (0);

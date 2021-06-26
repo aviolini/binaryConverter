@@ -5,8 +5,8 @@ int one_pipe_two_forks(int ac, char **av);
 
 int main(int ac, char **av)
 {
-	one_pipe_one_fork(ac,av);				//	a.out ls grep a
-	// one_pipe_two_forks(ac,av);			//	a.out ls grep a
+	// one_pipe_one_fork(ac,av);				//	a.out ls grep a
+	one_pipe_two_forks(ac,av);			//	a.out ls grep a
 
 	return (0);
 }
@@ -68,6 +68,7 @@ int one_pipe_two_forks(int ac, char **av)
 		if (dup2(fd_pipe[1], 1) < 0)
 			write(fd1, "Error\n", 6);
 		close(fd_pipe[1]);
+		close(fd1);
 		execlp(av[1], av[1], NULL);
 		write(fd1, "Failed\n", 7);
 		exit(1);	
@@ -88,6 +89,7 @@ int one_pipe_two_forks(int ac, char **av)
 			if (dup2(fd_pipe[0], 0) < 0)
 				write(fd1, "Error\n", 6);
 			close(fd_pipe[0]);
+			close(fd1);
 			execlp(av[2], av[2],av[3], NULL);
 			write(fd1, "Failed\n", 7);
 			exit(1);
@@ -105,6 +107,10 @@ int one_pipe_two_forks(int ac, char **av)
 			// dup2(fd1, 1);
 			// close(fd1);
 			write(fd1, "Ok\n", 3);
+			close(fd1);
+			close(0);
+			close(1);
+			close(2);
 		}
 	}
 	return 0;

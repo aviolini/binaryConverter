@@ -10,7 +10,7 @@
 int		ft_strlen(char *line);
 char	*ft_strdup(char *line);
 int		ft_strcmp(char *line, char c);
-int		close_all_fd_pipe(int ***fd_pipe, int num);
+int		close_all_fd_pipe(int **fd_pipe, int num);
 int		free_commands(char ****commands);
 int		free_pipes(int ***pipe_fd, int num_pipes);
 int		num_of_pipes(char **av);

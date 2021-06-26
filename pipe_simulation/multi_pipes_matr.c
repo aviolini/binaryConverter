@@ -42,7 +42,7 @@ int	main(int ac, char **av)
 				if (dup2(pipe_fd[i][1], 1) < 0)
 					write(fd[1], "Error_fd2\n", 11);
 			}
-			close_all_fd_pipe(&pipe_fd, num_pipes);
+			close_all_fd_pipe(pipe_fd, num_pipes);
 			close(fd[0]);
 			close(fd[1]);
 			execvp(commands[i][0], commands[i]);
@@ -52,7 +52,7 @@ int	main(int ac, char **av)
 			return(1);
 		}
 	}
-	close_all_fd_pipe(&pipe_fd, num_pipes);
+	close_all_fd_pipe(pipe_fd, num_pipes);
 	free_commands(&commands);
 	free_pipes(&pipe_fd, num_pipes);
 	x = -1;
@@ -61,6 +61,9 @@ int	main(int ac, char **av)
 	write(fd[1], "Finish\n", 7);
 	close(fd[0]);
 	close(fd[1]);
+	close(1);
+	close(2);
+	close(0);
 	return (0);
 }
 

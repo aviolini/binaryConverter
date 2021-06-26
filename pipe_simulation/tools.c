@@ -44,7 +44,7 @@ int ft_strcmp(char *line, char c)
 	return (-1);
 }
 
-int close_all_fd_pipe(int ***fd_pipe, int num)
+int close_all_fd_pipe(int **fd_pipe, int num)
 {
 	int i;
 	int x;
@@ -54,7 +54,7 @@ int close_all_fd_pipe(int ***fd_pipe, int num)
 	{
 		x = -1;
 		while (++x < 2)
-			close((*fd_pipe)[i][x]);
+			close((fd_pipe)[i][x]);
 	}	
 	return (0);
 }

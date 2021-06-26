@@ -1,6 +1,7 @@
 #!/bin/bash
 
-rm -r one_pipe
-rm -r three_pipes
-rm -r multi_pipes
-rm -r vgcore*
+rm -rf one_pipe
+rm -rf three_pipes
+rm -rf multi_pipes_matr
+rm -rf multi_pipes_list
+rm -rf vgcore*

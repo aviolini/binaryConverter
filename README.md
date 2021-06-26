@@ -8,4 +8,4 @@ return n differrent and random numbers--> gcc random_num.c  -o rand && ./rand 10
 
 #pipe_simulation
 
-test on pipe simulation 
+pipe simulation test 
