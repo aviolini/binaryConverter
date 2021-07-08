@@ -11,7 +11,6 @@ int	main(int ac, char **av)
 	int fd[2];
 	int **pipe_fd;
 	int pid;
-	int x;
 
 	fd[0] = dup(0);
 	(void)fd[0];
@@ -51,13 +50,25 @@ int	main(int ac, char **av)
 			free_pipes(pipe_fd, num_pipes);
 			return(1);
 		}
+		/*	NEW HANDLING	*/
+		if (i != 0)
+			if (close(pipe_fd[i -1][0]) < 0)
+				perror("Error_close:");
+		if (i != num_pipes)
+			if (close(pipe_fd[i][1]) < 0)
+				perror("Error_close:");
+		wait(NULL);
+		/*					*/
 	}
-	close_all_fd_pipe(pipe_fd, num_pipes);
+	/*	OLD HANDLING	*/
+	// int x;
+	// close_all_fd_pipe(pipe_fd, num_pipes);
+	// x = -1;
+	// while (++x < num_pipes)
+	// 	wait(NULL);
+	/*					*/
 	free_commands(&commands);
 	free_pipes(pipe_fd, num_pipes);
-	x = -1;
-	while(++x <= num_pipes)
-		wait(NULL);
 	write(fd[1], "Finish\n", 7);
 	close(fd[0]);
 	close(fd[1]);

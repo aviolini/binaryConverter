@@ -7,7 +7,6 @@ int main(int ac, char **av)
 {
 	int num_pipes;
 	int i;
-	int x;
 	int pid;
 	int **fd_pipe;
 	t_com **list;
@@ -54,11 +53,24 @@ int main(int ac, char **av)
 			exit(1);
 		}
 		temp = temp->next;
-	}
-	close_all_fd_pipe(fd_pipe, num_pipes);
-	x = -1;
-	while (++x < num_pipes)
+		/*	NEW HANDLING	*/
+		if (i != 0)
+			if (close(fd_pipe[i -1][0]) < 0)
+				perror("Error_close:");
+		if (i != num_pipes)
+			if (close(fd_pipe[i][1]) < 0)
+				perror("Error_close:");
 		wait(NULL);
+		/*					*/
+	}
+	/*	OLD HANDLING	*/
+	// int x;
+	// close_all_fd_pipe(fd_pipe, num_pipes);
+	// x = -1;
+	// while (++x < num_pipes)
+	// 	wait(NULL);
+	/*					*/
+	write(1, "Finish\n", 7);
 	free_pipes(fd_pipe,num_pipes);
 	free_list(&list);
 	close(1);
