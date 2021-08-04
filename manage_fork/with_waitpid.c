@@ -6,7 +6,7 @@
 /*   By: arrigo <arrigo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 15:14:30 by arrigo            #+#    #+#             */
-/*   Updated: 2021/08/04 16:12:42 by arrigo           ###   ########.fr       */
+/*   Updated: 2021/08/04 16:32:53 by arrigo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int main (int ac, char **av)
 			ft_exit_error(0, "Fork");
 		if (temp_pid == 0)
 		{
-           		sleep(1+i);
+           	sleep(1+i);
 			if (i == 0)
 				exit(0);					//ESCE SENZA ERRORI
 			if (i == 1)
@@ -70,7 +70,7 @@ int main (int ac, char **av)
 		}
 		pid[i++] = temp_pid;
 		usleep(100);
-	printf("Ho creato il processo figlio: %d\n", temp_pid);
+		printf("Ho creato il processo figlio: %d\n", temp_pid);
 	}
 	sleep(1);
 	printf("Aspetto che finiscano i processi figli\n");

@@ -6,7 +6,7 @@
 /*   By: arrigo <arrigo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 15:14:30 by arrigo            #+#    #+#             */
-/*   Updated: 2021/08/04 16:13:00 by arrigo           ###   ########.fr       */
+/*   Updated: 2021/08/04 16:33:09 by arrigo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int main (int ac, char **av)
 		}
 		pid[i++] = temp_pid;
 		usleep(100);
-	printf("Ho creato il processo figlio: %d\n", temp_pid);
+		printf("Ho creato il processo figlio: %d\n", temp_pid);
 	}
 	sleep(1);
 	printf("Premi invio per chiudere i processi figli\n");
@@ -71,7 +71,7 @@ int main (int ac, char **av)
 		STEP
 		if (kill(pid[i], SIGTERM) == -1)
 			ft_exit_error(0, "Kill");
-			printf("Killed: %d", pid[i]);
+		printf("Killed: %d", pid[i]);
 		i++;
 	}
 	printf("\nHo chuso tutti i processi figli\n");
