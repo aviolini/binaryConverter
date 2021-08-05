@@ -6,7 +6,7 @@
 /*   By: arrigo <arrigo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 15:14:30 by arrigo            #+#    #+#             */
-/*   Updated: 2021/08/05 11:22:42 by arrigo           ###   ########.fr       */
+/*   Updated: 2021/08/05 15:42:53 by arrigo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,15 @@ int	ft_exit_error(int status, char *s)
 	}
 }
 
+void ft_sigterm(int sig)
+{
+	printf("%d:Ricevuto il segnale SIGTERM:%d\n",getpid(),sig);
+	if ((signal(sig, SIG_DFL)) == SIG_ERR) //SERVE A SBLOCCARE IL SEGNALE
+		ft_exit_error(0, "Signal");
+	if (kill(getpid(), sig) == -1)
+		ft_exit_error(0, "Kill");
+}
+
 int main (int ac, char **av)
 {
 	unsigned int i;
@@ -58,11 +67,18 @@ int main (int ac, char **av)
 		if (temp_pid == 0)
 		{
 			printf("%d:figlio num %d\n",getpid(), i);
-			while(1)
-                usleep(10);
+			if (signal(SIGTERM, ft_sigterm) == SIG_ERR)
+				ft_exit_error(0, "Signal");
+			if (signal(SIGINT, SIG_DFL) == SIG_ERR)
+				ft_exit_error(0, "Signal");
+			if (signal(SIGQUIT, SIG_DFL) == SIG_ERR)
+				ft_exit_error(0, "Signal");
+			if (signal(SIGUSR1, SIG_IGN) == SIG_ERR)
+				ft_exit_error(0, "Signal");
+			while(1);
 		}
 		pid[i] = temp_pid;
-		sleep(1);
+		sleep(0.1);
 		// wait(NULL);
 		i++;
 	}
@@ -72,19 +88,41 @@ int main (int ac, char **av)
 	{
 		if (i == 0)
 		{
-			if (kill(pid[i], SIGSTOP) == -1)
+			if (kill(pid[i], SIGSTOP) == -1)		// LIKE CTRL-Z IN BASH
 				ft_exit_error(0, "Kill");
 			printf("%d:Stopped\n",pid[i]);
 			sleep(1);
-			if (kill(pid[i], SIGCONT) == -1)
+			if (kill(pid[i], SIGCONT) == -1)		//LIKE fg IN BASH
 				ft_exit_error(0, "Kill");
-			printf("%d:Continue\n",pid[i]);
+			printf("%d:Continued\n",pid[i]);
+			if (kill(pid[i], SIGKILL) == -1)
+				ft_exit_error(0, "Kill");
+		usleep(1000);
 		}
-		if (kill(pid[i], SIGTERM) == -1)
-			ft_exit_error(0, "Kill");
-		printf("%d:Killed\n", pid[i]);
+		else if (i == 1)
+		{	
+			if (kill(pid[i], SIGINT) == -1)
+				ft_exit_error(0, "Kill");
+			usleep(1000);
+		}
+		else if (i == 2)
+		{	
+			if (kill(pid[i], SIGTERM) == -1)
+				ft_exit_error(0, "Kill");
+			usleep(1000);
+		}
+		else if (i == 3)
+		{	
+			if (kill(pid[i], SIGQUIT) == -1)
+				ft_exit_error(0, "Kill");
+			usleep(1000);
+		}
+		else
+			if (kill(pid[i], SIGKILL) == -1)
+				ft_exit_error(0, "Kill");
 		if (waitpid(pid[i], &wstatus, 0) == -1)
 			ft_exit_error(0, "Waitpid");
+		printf("%d:Killed\n", pid[i]);
 		if (WIFEXITED(wstatus))
 			printf("%d:E' terminato normalmente, con exit_status: %d\n", pid[i], WEXITSTATUS(wstatus));
 		if (WIFSIGNALED(wstatus))
