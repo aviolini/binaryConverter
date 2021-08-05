@@ -6,7 +6,7 @@
 /*   By: arrigo <arrigo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 15:14:30 by arrigo            #+#    #+#             */
-/*   Updated: 2021/08/05 16:08:15 by arrigo           ###   ########.fr       */
+/*   Updated: 2021/08/05 17:33:13 by arrigo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,15 +44,26 @@ void ft_sigterm(int sig)
 	printf("%d:Ricevuto il segnale SIGTERM:%d\n",getpid(),sig);
 	if ((signal(sig, SIG_DFL)) == SIG_ERR) //SERVE A SBLOCCARE IL SEGNALE
 		ft_exit_error(0, "Signal");
-	exit(0);
+	if (kill(getpid(), sig) == -1)
+		ft_exit_error(0, "Kill");
 }
 
-void ft_sigusr1(int sig)
+void ft_sigint(int sig)
 {
-	printf("%d:Ricevuto il segnale SIGUSR1:%d\n",getpid(),sig);
+	printf("%d:Ricevuto il segnale SIGINT:%d\n",getpid(),sig);
 	if ((signal(sig, SIG_DFL)) == SIG_ERR) //SERVE A SBLOCCARE IL SEGNALE
 		ft_exit_error(0, "Signal");
-	exit(0);
+	if (kill(getpid(), sig) == -1)
+		ft_exit_error(0, "Kill");
+}
+
+void ft_sigquit(int sig)
+{
+	printf("%d:Ricevuto il segnale SIGQUIT:%d\n",getpid(),sig);
+	if ((signal(sig, SIG_DFL)) == SIG_ERR) //SERVE A SBLOCCARE IL SEGNALE
+		ft_exit_error(0, "Signal");
+	if (kill(getpid(), sig) == -1)
+		ft_exit_error(0, "Kill");
 }
 
 int main (int ac, char **av)
@@ -74,13 +85,11 @@ int main (int ac, char **av)
 		if (temp_pid == 0)
 		{
 			printf("%d:figlio num %d\n",getpid(), i);
-			if (signal(SIGTERM, ft_sigterm) == SIG_ERR)
+			if (signal(SIGTERM, &ft_sigterm) == SIG_ERR)
 				ft_exit_error(0, "Signal");
-			if (signal(SIGINT, SIG_DFL) == SIG_ERR)
+			if (signal(SIGINT, &ft_sigint) == SIG_ERR)
 				ft_exit_error(0, "Signal");
-			if (signal(SIGQUIT, SIG_DFL) == SIG_ERR)
-				ft_exit_error(0, "Signal");
-			if (signal(SIGUSR1, ft_sigusr1) == SIG_ERR)
+			if (signal(SIGQUIT, &ft_sigquit) == SIG_ERR)
 				ft_exit_error(0, "Signal");
 			while(1);
 		}
@@ -120,14 +129,17 @@ int main (int ac, char **av)
 		}
 		else if (i == 3)
 		{	
-			if (kill(pid[i], SIGUSR1) == -1)
+			if (kill(pid[i], SIGQUIT) == -1)
 				ft_exit_error(0, "Kill");
 			usleep(1000);
 		}
 		else
+		{
 			printf("Premere CTRL-\\ PER ESEGUIRE IL SEGNALE SIGQUIT\n");
-		// 	if (kill(pid[i], SIGKILL) == -1)
-		// 		ft_exit_error(0, "Kill");
+			printf("Premere CTRL-C PER ESEGUIRE IL SEGNALE SIGINT\n");
+		}
+		if (signal(SIGINT, SIG_IGN) == SIG_ERR)
+			ft_exit_error(0, "Signal");
 		if (signal(SIGQUIT, SIG_IGN) == SIG_ERR)
 			ft_exit_error(0, "Signal");
 		if (waitpid(pid[i], &wstatus, 0) == -1)
