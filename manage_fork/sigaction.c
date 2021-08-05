@@ -6,7 +6,7 @@
 /*   By: arrigo <arrigo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 15:14:30 by arrigo            #+#    #+#             */
-/*   Updated: 2021/08/05 16:00:14 by arrigo           ###   ########.fr       */
+/*   Updated: 2021/08/05 16:02:16 by arrigo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,15 +48,6 @@ void ft_sigterm(int sig)
 		ft_exit_error(0, "Kill");
 }
 
-void ft_sigterm(int sig)
-{
-	printf("%d:Ricevuto il segnale SIGTERM:%d\n",getpid(),sig);
-	if ((signal(sig, SIG_DFL)) == SIG_ERR) //SERVE A SBLOCCARE IL SEGNALE
-		ft_exit_error(0, "Signal");
-	if (kill(getpid(), sig) == -1)
-		ft_exit_error(0, "Kill");
-}
-
 int main (int ac, char **av)
 {
 	unsigned int i;
@@ -82,9 +73,7 @@ int main (int ac, char **av)
 				ft_exit_error(0, "Signal");
 			if (signal(SIGQUIT, SIG_DFL) == SIG_ERR)
 				ft_exit_error(0, "Signal");
-			if (signal(SIGUSR1, ft_sigusr1) == SIG_ERR)
-				ft_exit_error(0, "Signal");
-			if (signal(SIGUSR2, SIG_IGN) == SIG_ERR)
+			if (signal(SIGUSR1, SIG_IGN) == SIG_ERR)
 				ft_exit_error(0, "Signal");
 			while(1);
 		}
@@ -129,7 +118,7 @@ int main (int ac, char **av)
 			usleep(1000);
 		}
 		else
-			if (kill(pid[i], SIGUSR1) == -1)
+			if (kill(pid[i], SIGKILL) == -1)
 				ft_exit_error(0, "Kill");
 		if (waitpid(pid[i], &wstatus, 0) == -1)
 			ft_exit_error(0, "Waitpid");
