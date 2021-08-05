@@ -26,3 +26,7 @@ canc commenti
 rimane aperto 1 fd
 
 leaks ok
+
+# manage fork
+
+esempi riguardanti le funzioni relative al fork: waitpid, kill, sigaction/signal
