@@ -6,7 +6,7 @@
 /*   By: arrigo <arrigo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 15:14:30 by arrigo            #+#    #+#             */
-/*   Updated: 2021/08/04 16:32:53 by arrigo           ###   ########.fr       */
+/*   Updated: 2021/08/05 11:24:02 by arrigo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,11 @@ int main (int ac, char **av)
 			if (i == 1)
 				exit(1);					//ESCE CON ERRORE
 			if (i == 2)
-				kill(getpid(), SIGTERM);	//ESCE CON AUTO-TERM
+				if (kill(getpid(), SIGTERM) == -1)	//ESCE CON AUTO-TERM
+					ft_exit_error(0, "Kill");
 			if (i == 3)
-				kill(getpid(), SIGKILL);	//ESCE CON AUTO-KILL
+				if (kill(getpid(), SIGKILL))	//ESCE CON AUTO-KILL
+					ft_exit_error(0, "Kill");
 			exit(0);
 		}
 		pid[i++] = temp_pid;
@@ -80,9 +82,9 @@ int main (int ac, char **av)
 		if (waitpid(pid[i], &wstatus, 0) == -1)
 			ft_exit_error(0, "Waitpid");
 		if (WIFEXITED(wstatus))
-			printf("%d: E' terminato normalmente, con exit_status: %d\n", pid[i], WEXITSTATUS(wstatus));
+			printf("%d:E' terminato normalmente, con exit_status: %d\n", pid[i], WEXITSTATUS(wstatus));
 		if (WIFSIGNALED(wstatus))
-				printf("%d: E' terminato con il segnale: %d\n", pid[i], WTERMSIG(wstatus));
+				printf("%d:E' terminato con il segnale: %d\n", pid[i], WTERMSIG(wstatus));
 		i++;
 	}
 	printf("Ho aspettato tutti i processi figli\n");

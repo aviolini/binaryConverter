@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   with_kill.c                                        :+:      :+:    :+:   */
+/*   with_sig-handler.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: arrigo <arrigo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 15:14:30 by arrigo            #+#    #+#             */
-/*   Updated: 2021/08/05 11:23:43 by arrigo           ###   ########.fr       */
+/*   Updated: 2021/08/05 11:22:42 by arrigo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <unistd.h>
 #include <signal.h>
 #include <errno.h>
-#include <sys/wait.h> 
+#include <sys/wait.h>
 
 # define STEP 	scanf("%c", &scan);
 
@@ -61,15 +61,25 @@ int main (int ac, char **av)
 			while(1)
                 usleep(10);
 		}
-		pid[i++] = temp_pid;
-		usleep(100);
+		pid[i] = temp_pid;
+		sleep(1);
+		// wait(NULL);
+		i++;
 	}
 	sleep(1);
-	printf("Premi invio per chiudere i processi figli\n");
 	i = 0;
 	while (i < num_procs)
 	{
-		STEP
+		if (i == 0)
+		{
+			if (kill(pid[i], SIGSTOP) == -1)
+				ft_exit_error(0, "Kill");
+			printf("%d:Stopped\n",pid[i]);
+			sleep(1);
+			if (kill(pid[i], SIGCONT) == -1)
+				ft_exit_error(0, "Kill");
+			printf("%d:Continue\n",pid[i]);
+		}
 		if (kill(pid[i], SIGTERM) == -1)
 			ft_exit_error(0, "Kill");
 		printf("%d:Killed\n", pid[i]);
@@ -79,6 +89,7 @@ int main (int ac, char **av)
 			printf("%d:E' terminato normalmente, con exit_status: %d\n", pid[i], WEXITSTATUS(wstatus));
 		if (WIFSIGNALED(wstatus))
 				printf("%d:E' terminato con il segnale: %d\n", pid[i], WTERMSIG(wstatus));
+		sleep(1);
 		i++;
 	}
 	printf("\nHo chuso tutti i processi figli\n");
