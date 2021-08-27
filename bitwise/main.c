@@ -16,8 +16,10 @@ int main()
 	
 	
 	printf("\n~1 = %d\t\t~0 = %d\n",~1,~0);
+	printf("!1 = %d\t\t!0 = %d\n",!1,!0);
 	printf("1&1 = %d\t\t1&0 = %d\t\t0&0 = %d\n",1&1,1&0,0&0);
 	printf("1|1 = %d\t\t1|0 = %d\t\t0|0 = %d\n",1|1,1|0,0|0);
 	printf("1^1 = %d\t\t1^0 = %d\t\t0^0 = %d\n",1^1,1^0,0^0);
 	return 0;
 }
+
