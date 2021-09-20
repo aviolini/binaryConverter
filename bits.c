@@ -22,7 +22,7 @@ long int convert (int n, int *space)
 		printf(" ");
 	if (n)
 	{
-		printf("%ld", n % 2);
+		printf("%d", n % 2);
 		(*space)--;
 		if(!(*space % 8))
 			printf(" ");
@@ -41,7 +41,7 @@ int main(int ac, char **av)
 	for (int i = 1; i < ac ; i++)
 	{
 		long int n = atol(av[i]);
-		if (n < INT_MIN || n > INT_MAX)
+		if (n < 0 || n > INT_MAX) // || n < INT_MIN TODO
 		{
 			printf("Bad argument\n");
 			return 1;
