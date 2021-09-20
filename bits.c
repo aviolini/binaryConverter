@@ -4,15 +4,15 @@
 #define BYTE 8
 #define INT ((sizeof(char)*(BYTE)) * sizeof(int))
 
-long int convert (int n, int *space)
+long int convert (int n, int space)
 {
 	int d = INT;
 	if (n != 0)
 	{
-		(*space)++;
+		(space)++;
 		convert(n >> 1, space);
 	}
-	while (!n && (--d > *space))
+	while (!n && (--d > space))
 	{
 		if(!(d % BYTE))
 			printf(" ");
@@ -23,8 +23,8 @@ long int convert (int n, int *space)
 	if (n)
 	{
 		printf("%d", n % 2);
-		(*space)--;
-		if(!(*space % 8))
+		(space)--;
+		if(!(space % 8))
 			printf(" ");
 	}
 	return 0;
@@ -32,7 +32,7 @@ long int convert (int n, int *space)
 
 int main(int ac, char **av)
 {
-	int space = 0;
+	static int space = 0;
 	if (ac < 2)
 	{
 		printf("Error arguments\n");
@@ -47,7 +47,7 @@ int main(int ac, char **av)
 			return 1;
 		}
 		printf("[%d]:\t");
-		convert((int)n, &space);
+		convert((int)n, space);
 		printf("\n");
 	}
 	return 0;
