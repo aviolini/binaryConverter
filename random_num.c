@@ -6,7 +6,7 @@
 /*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 09:38:22 by aviolini          #+#    #+#             */
-/*   Updated: 2021/05/27 08:13:29 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/09/21 00:35:41 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,10 @@ int main (int ac, char **av)
 	int		*numbers;
 
 	if (ac != 2)
+	{
+		printf("Error arguments, enter the amount of numbers to display\n");
 		return (1);
+	}
 	n = atoi(av[1]);
 	if (n > MAX)
 		return (printf("Error, limit is %d\n", MAX));

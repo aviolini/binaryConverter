@@ -35,18 +35,18 @@ int main(int ac, char **av)
 	static int space = 0;
 	if (ac < 2)
 	{
-		printf("Error arguments\n");
+		printf("Error arguments, enter number/s to converter\n");
 		return 1;
 	}
 	for (int i = 1; i < ac ; i++)
 	{
 		long int n = atol(av[i]);
+		printf("[%ld]:\t", n);
 		if (n < 0 || n > INT_MAX) // || n < INT_MIN TODO
 		{
 			printf("Bad argument\n");
 			return 1;
 		}
-		printf("[%d]:\t");
 		convert((int)n, space);
 		printf("\n");
 	}

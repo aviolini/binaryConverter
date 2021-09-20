@@ -6,7 +6,7 @@
 /*   By: arrigo <arrigo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/04 11:51:47 by arrigo            #+#    #+#             */
-/*   Updated: 2021/08/04 12:58:46 by arrigo           ###   ########.fr       */
+/*   Updated: 2021/09/21 00:43:28 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 int	main()
 {
-	printf("|sizeof:\n");
+	printf("|sizeof:\tbytes:\n");
 	printf("|\n");
 	printf("|CHAR:");
 	printf("\t\t%d\n",sizeof(char));
@@ -23,7 +23,7 @@ int	main()
 	printf("%d\n", SCHAR_MAX);
 	printf("|MIN:");
 	printf("%d\n",SCHAR_MIN );
-	printf("|___\n");
+	 
 	printf("|\n");
 	printf("|UNS_CHAR:");
 	printf("\t%d\n",sizeof(unsigned char));
@@ -31,7 +31,7 @@ int	main()
 	printf("%d\n", UCHAR_MAX);
 	printf("|MIN:");
 	printf("%d\n", 0);
-	printf("|___\n");
+	 
 	printf("|\n");
 	printf("|SHORT:");
 	printf("\t\t%d\n",sizeof(short));
@@ -39,7 +39,7 @@ int	main()
 	printf("%d\n",SHRT_MAX );
 	printf("|MIN:");
 	printf("%d\n",SHRT_MIN );
-	printf("|___\n");
+	 
 	printf("|\n");
 	printf("|UNS_SHORT:");
 	printf("\t%d\n",sizeof(unsigned short));
@@ -47,7 +47,7 @@ int	main()
 	printf("%d\n",USHRT_MAX );
 	printf("|MIN:");
 	printf("%d\n",0 );
-	printf("|___\n");
+	 
 	printf("|\n");
 	printf("|INT:");
 	printf("\t\t%d\n",sizeof(int));
@@ -55,7 +55,7 @@ int	main()
 	printf("%d\n", INT_MAX);
 	printf("|MIN:");
 	printf("%d\n", INT_MIN);
-	printf("|___\n");
+	 
 	printf("|\n");
 	printf("|UNS_INT:");
 	printf("\t%d\n",sizeof(unsigned int));
@@ -63,7 +63,7 @@ int	main()
 	printf("%u\n", UINT_MAX);
 	printf("|MIN:");
 	printf("%u\n", 0);
-	printf("|___\n");
+	 
 	printf("|\n");
 	printf("|LONG:");
 	printf("\t\t%d\n",sizeof(long));
@@ -71,7 +71,7 @@ int	main()
 	printf("%ld\n",LONG_MAX );
 	printf("|MIN:");
 	printf("%ld\n",LONG_MIN );
-	printf("|___\n");
+	 
 	printf("|\n");
 	printf("|UNS_LONG:");
 	printf("\t%d\n",sizeof(unsigned long));
@@ -79,7 +79,7 @@ int	main()
 	printf("%lu\n",ULONG_MAX );
 	printf("|MIN:");
 	printf("%ld\n",0 );
-	printf("|___\n");
+	 
 	printf("|\n");
 	if (sizeof(long long) != sizeof(long))
 	{		
@@ -89,7 +89,7 @@ int	main()
 		printf("%lld\n",LLONG_MAX );
 		printf("|MIN:");
 		printf("%lld\n",LLONG_MIN );
-		printf("|___\n");
+		 
 		printf("|\n");
 		printf("|UNS LONG LONG:");
 		printf("\t%lld\n",sizeof(unsigned long long));
@@ -97,7 +97,7 @@ int	main()
 		printf("%llu\n",ULLONG_MAX );
 		printf("|MIN:");
 		printf("%lld\n",0 );
-		printf("|___\n");
+		 
 		printf("|\n");
 	}
 	printf("|FLOAT:");
@@ -106,7 +106,7 @@ int	main()
 	// printf("%d\n", );
 	// printf("|MIN:");
 	// printf("%d\n", );
-	printf("|___\n");
+	 
 	printf("|\n");
 	printf("|DOUBLE:");
 	printf("\t%d\n",sizeof(double));
@@ -114,7 +114,7 @@ int	main()
 	// printf("%d\n", );
 	// printf("|MIN:");
 	// printf("%d\n", );
-	printf("|___\n");
+	 
 	printf("|\n");
 	printf("|LONG DOUBLE:");
 	printf("\t%d\n",sizeof(long double));
@@ -122,7 +122,7 @@ int	main()
 	// printf("%d\n", );
 	// printf("|MIN:");
 	// printf("%d\n", );
-	printf("|___\n");
+	 
 
 	return(0);
 }
