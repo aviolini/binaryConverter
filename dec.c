@@ -1,17 +1,30 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
+#include <string.h>
 #define BYTE 8
 #define INT ((sizeof(char)*(BYTE)) * sizeof(int))
 
-long int convert (int n, int space, int *ret)
+int check(char *s)
 {
-	// long int ret = 0;
-	if (n != 0)
-		convert(n / 10, ++space, ret);
-	if (n)
-		*ret += (n % 2) << (space--);
+	int c = -1;
+	while (s[++c])
+		if (s[c] != '1' && s[c] != '0')
+		{
+			printf("Bad argument\n");
+			return 1;
+		}
 	return 0;
+}
+
+long int convert (int n, int space)
+{
+	long int ret = 0;
+	if (n != 0)
+		ret = convert(n / 10, ++space);
+	if (n)
+		ret += (n % 2) << (space--);
+	return ret;
 }
 
 int main(int ac, char **av)
@@ -25,18 +38,22 @@ int main(int ac, char **av)
 	}
 	for (int i = 1; i < ac ; i++)
 	{
-		int ret = 0;
-		long int n = atol(av[i]);
-		printf("[%ld]:\t", n);
-		if (n < 0 || n > INT_MAX) // || n < INT_MIN TODO
-		{
-			printf("Bad argument\n");
-			return 1;
-		}
-		convert((int)n, space, &ret);
-		// if (!n)
-			printf("%d\n", ret);
-		// printf("\n");
+		long int ret = 0;
+		size_t size = strlen(av[i]);
+		if (check(av[i]))
+			continue;
+		printf("ok\n");
+
+		// printf("[%ld]:\t", n);
+		// if (n < 0)// || n > INT_MAX) // || n < INT_MIN TODO
+		// {
+		// 	printf("Bad argument\n");
+		// 	return 1;
+		// }
+		// ret = convert((int)n, space);
+		// // if (!n)
+		// 	printf("%d\n", ret);
+		// // printf("\n");
 	}
 	return 0;
 }
