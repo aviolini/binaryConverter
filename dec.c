@@ -1,9 +1,7 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <limits.h>
 #include <string.h>
-#define BYTE 8
-#define INT ((sizeof(char)*(BYTE)) * sizeof(int))
+#define TAB_SIZE 8
+#define EXTRA_CHARS 3 //ADD [ ] ; INCR +3 CHARS OUTPUT PRINT
 
 int check(char *s)
 {
@@ -16,8 +14,6 @@ int check(char *s)
 
 int main(int ac, char **av)
 {
-	int space = 0;
-	
 	if (ac < 2)
 	{
 		printf("Error arguments, enter number/s to converter\n");
@@ -28,28 +24,28 @@ int main(int ac, char **av)
 	for (int i = 0; i < ac; i++)
 		if ((len = (int)strlen(av[i])) > maxLen)
 			maxLen = len;
-	maxLen +=3;
+	maxLen += EXTRA_CHARS;	
 	for (int i = 1; i < ac ; i++)
 	{
-		long int ret = 0;
-		if (check(av[i]))
-		{
-			printf("[%s]: Bad argument\n",av[i]);
-			continue;
-		}
 		len = (int)strlen(av[i]);
-		int tmp = len;
-		len+=3;
-		int c = -1;
-		while (av[i][++c])
-			ret += ((av[i][c] + 48 ) % 2) << (--tmp);
+		int index = len - 1;
+		len += EXTRA_CHARS;
 		printf("[%s]:", av[i]);
-		while ((len>>3) <= (maxLen>>3))
+		while ((len>>3) <= (maxLen>>3))				//	=/8
 		{
-			len = len + 8;
+			len = len + TAB_SIZE;
 			printf("\t");
 		}
-		printf("%ld\n", ret);
+		if (check(av[i]))
+			printf("Bad argument\n",av[i]);
+		else 
+		{
+			int c = 0;
+			long int ret = 0;
+			while (av[i][c])
+				ret += ((av[i][c++] + 48 ) % 2) << (index--);
+			printf("%ld\n", ret);
+		}
 	}
 	return 0;
 }
