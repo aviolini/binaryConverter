@@ -28,6 +28,7 @@ int main(int ac, char **av)
 	for (int i = 0; i < ac; i++)
 		if ((len = (int)strlen(av[i])) > maxLen)
 			maxLen = len;
+	maxLen +=3;
 	printf("MAXLEN:%d\n", maxLen);
 	for (int i = 1; i < ac ; i++)
 	{
@@ -38,10 +39,19 @@ int main(int ac, char **av)
 			continue;
 		}
 		len = (int)strlen(av[i]);
+		int tmp = len;
+		len+=3;
 		int c = -1;
 		while (av[i][++c])
-		ret += ((av[i][c] + 48 ) % 2) << (--len);
-		printf("[%s]:\t%ld\n", av[i], ret);
+			ret += ((av[i][c] + 48 ) % 2) << (--tmp);
+		printf("[%s]:", av[i]);
+		while ((len/8) <= (maxLen /8))
+		{
+			len = len + 8;
+			printf("\t");
+		}
+		printf("%ld\n", ret);
+
 	}
 	return 0;
 }
