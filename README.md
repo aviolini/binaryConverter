@@ -1,7 +1,7 @@
 # utils :
 
 
-# random_num.c:
+# randomNum.c:
 
 return n differrent and random numbers--> gcc random_num.c  -o rand && ./rand 100
 
@@ -9,6 +9,10 @@ return n differrent and random numbers--> gcc random_num.c  -o rand && ./rand 10
 
 print sizes and limits of c variables--> gcc sizeof.c -o sizeof && ./sizeof
 
-# bits.c:
+# toBits.c:
 
 convert decimal number to binary--> gcc bits.c -o bits && ./bits 1 2 3 4 8 128 255
+
+# toDec.c:
+
+convert binary number to decimal--> gcc bits.c -o bits && ./bits 1 10 100 1000 10000 100000
