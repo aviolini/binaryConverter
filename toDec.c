@@ -37,7 +37,7 @@ int main(int ac, char **av)
 			printf("\t");
 		}
 		if (check(av[i]))
-			printf("Bad argument\n",av[i]);
+			printf("Bad argument\n");
 		else 
 		{
 			int c = 0;
