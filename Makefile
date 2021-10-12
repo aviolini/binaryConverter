@@ -7,11 +7,15 @@ CFLAGS	=	-Wall -Wextra -Werror
 
 RM		=	rm -f
 
-PATHINSTALL = ~/bin
+PATHINSTALL = $(HOME)/bin
+
+#VAR		=	'export PATH="$$PATH:$(PATHINSTALL)"'
 
 TEST	=	cat ~/.bashrc | grep 'export PATH="$$PATH:$(PATHINSTALL)"'
 
-EXPR	=	 echo 'export PATH="$$PATH:$(PATHINSTALL)"' >> ~/.bashrc
+#TEST1	=	$(cat ~/.bashrc | grep -n 'export PATH="$$PATH:$(PATHINSTALL)"'| cut -d: -f1)
+
+EXPR	=	 echo 'export PATH="$$PATH:$(PATHINSTALL)"' >> $(HOME)/.bashrc
 
 all		:	
 			$(CC) $(CFLAGS) -o randomNum randomNum.c
@@ -23,7 +27,6 @@ clean	:
 			$(RM) $(MYBIN)
 
 fclean	:	clean
-			$(RM) $(MYBIN)
 
 re		:	fclean all
 
@@ -31,11 +34,18 @@ install	: 	$(MYBIN)
 			install -d $(PATHINSTALL)
 			install -m 744 $(MYBIN) $(PATHINSTALL)
 			$(TEST) || $(EXPR)
-#			source ~/.bashrc
+			$(RM) $(MYBIN)
+
 uninstall:	fclean
 			$(RM) $(PATHINSTALL)/randomNum
 			$(RM) $(PATHINSTALL)/sizeof
 			$(RM) $(PATHINSTALL)/toBits
 			$(RM) $(PATHINSTALL)/toDec
-#deve cancellare anche la riga di ~/.bashrc?
+
+remove	:	uninstall
+			rm -rf $(PATHINSTALL)
+			
+#			$(TEST) && sed -i "${TEST1}d" $(HOME)/.bashrc
+#			rimuovere la riga da bashrc			
+
 ./PHONY	:	all re clean fclean
