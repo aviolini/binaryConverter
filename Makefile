@@ -7,6 +7,8 @@ CFLAGS	=	-Wall -Wextra -Werror
 
 RM		=	rm -f
 
+PATHINSTALL = ~/bin
+
 all		:	
 			$(CC) $(CFLAGS) -o randomNum randomNum.c
 			$(CC) $(CFLAGS) -o sizeof sizeof.c
@@ -20,5 +22,16 @@ fclean	:	clean
 			$(RM) $(MYBIN)
 
 re		:	fclean all
+
+install	: 	$(MYBIN)
+			install -d $(PATHINSTALL)
+			install -m 744 $(MYBIN) $(PATHINSTALL)
+			echo 'export PATH="$$PATH:$(PATHINSTALL)"' >> ~/.bashrc
+
+uninstall:	fclean
+			$(RM) $(PATHINSTALL)/randomNum
+			$(RM) $(PATHINSTALL)/sizeof
+			$(RM) $(PATHINSTALL)/toBits
+			$(RM) $(PATHINSTALL)/toDec
 
 ./PHONY	:	all re clean fclean
