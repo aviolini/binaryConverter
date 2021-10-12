@@ -9,6 +9,10 @@ RM		=	rm -f
 
 PATHINSTALL = ~/bin
 
+TEST	=	cat ~/.bashrc | grep 'export PATH="$$PATH:$(PATHINSTALL)"'
+
+EXPR	=	 echo 'export PATH="$$PATH:$(PATHINSTALL)"' >> ~/.bashrc
+
 all		:	
 			$(CC) $(CFLAGS) -o randomNum randomNum.c
 			$(CC) $(CFLAGS) -o sizeof sizeof.c
@@ -26,12 +30,12 @@ re		:	fclean all
 install	: 	$(MYBIN)
 			install -d $(PATHINSTALL)
 			install -m 744 $(MYBIN) $(PATHINSTALL)
-			echo 'export PATH="$$PATH:$(PATHINSTALL)"' >> ~/.bashrc
-
+			$(TEST) || $(EXPR)
+#			source ~/.bashrc
 uninstall:	fclean
 			$(RM) $(PATHINSTALL)/randomNum
 			$(RM) $(PATHINSTALL)/sizeof
 			$(RM) $(PATHINSTALL)/toBits
 			$(RM) $(PATHINSTALL)/toDec
-
+#deve cancellare anche la riga di ~/.bashrc?
 ./PHONY	:	all re clean fclean
