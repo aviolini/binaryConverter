@@ -7,24 +7,26 @@
 #define TAB_SIZE 8
 #define EXTRA_CHARS 3
 
-int numlen(int n)
+short is_neg;
+
+int numlen(long n)
 {
 	int len = 0;
 	for (; n > 0; n /= 10, len++){}
 	return len;
 }
 
-void tab(int n, int maxLen)
+void tab(long n, int maxLen)
 {
 	int len = numlen(n) + EXTRA_CHARS;
-	while ((len>>3) <= (maxLen>>3))
+	while ((len >> 3) <= (maxLen >> 3))
 	{
 		len = len + TAB_SIZE;
 		printf("\t");
 	}
 }
 
-long int convert (int n, int space)
+long int convert (long n, int space)
 {
 	int d = INT;
 	if (n != 0)
@@ -32,17 +34,20 @@ long int convert (int n, int space)
 		(space)++;
 		convert(n >> 1, space);
 	}
-	while (!n && (--d > space))
+	while (!n && (--d >= space))
 	{
-		if(!(d % BYTE))
+		if(!((d + 1) % BYTE))
 			printf(" ");
-		printf("0");
+		if (!is_neg)
+			printf("0");
+		else
+			printf("1");
 	}
-	if (!n && !(d%BYTE))
+	if (!n && !((d + 1) % BYTE))
 		printf(" ");
 	if (n)
 	{
-		printf("%d", n % 2);
+		printf("%ld", n % 2);
 		(space)--;
 		if(!(space % 8))
 			printf(" ");
@@ -62,7 +67,7 @@ int main(int ac, char **av)
 	for (int i = 1; i < ac ; i++)
 	{
 		int c = 0;
-		long int n = atol(av[i]);
+		long n = atol(av[i]);
 		for (; n > 0; n /= 10, c++){}
 		if (c > maxLen)
 			maxLen = c;
@@ -70,18 +75,34 @@ int main(int ac, char **av)
 	maxLen += EXTRA_CHARS;
 	for (int i = 1; i < ac ; i++)
 	{
-		long int n = atol(av[i]);
-		if (n < 0 || n > INT_MAX || (n == 0 && strcmp(av[i], "0"))) // n < 0 TODO
+		is_neg = 0;
+		long n = atol(av[i]);
+		if (n == 0 && strcmp(av[i], "0"))
 		{
 			printf("[%s]:", av[i]);
 			tab(n, maxLen);
-			printf("Bad argument\n");
+			printf(" Bad argument\n");
+		}
+		else if ( n > INT_MAX || n < INT_MIN)
+		{
+			printf("[%s]:", av[i]);
+			tab(n, maxLen);
+			printf(" Out of range, limits: [%d] and [%d]\n", INT_MAX, INT_MIN);
 		}
 		else 
 		{
-			printf("[%ld]:", n);
+			printf("[");
+			if (n < 0)
+			{
+				is_neg = 1;
+				n *= -1;
+				printf("-");
+			}
+			printf("%ld]:", n);
 			tab(n, maxLen);
-			convert((int)n, space);
+			if (is_neg)
+				n = INT_MAX - n + 1;
+			convert(n, space);
 			printf("\n");
 		}
 	}
