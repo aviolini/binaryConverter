@@ -63,6 +63,22 @@ int main(int ac, char **av)
 		printf("Error arguments, enter number/s to converter\n");
 		return 1;
 	}
+	if (!strcmp(av[1],"test"))
+	{
+		char *new_av[] = {av[0], "2147483648", "2147483647", "2147483646", "65536", "32768",
+		"256", "128", "64", "32", "16", "8", "4", "2", "1", "0", "-1", "-2", "-4", "-8",
+		"-16", "-32", "-64", "-128", "-255", "-32769", "-65537", "-2147483648", NULL};
+		ac = sizeof(new_av) / sizeof(char*) - 1;
+		av = new_av;
+	}
+	if (!strcmp(av[1],"help"))
+	{
+		printf("|-----------------------------------------------------------help--------------------|\n");
+		printf("|type: ./toBits test to view a simple test converter                                |\n");
+		printf("|type: ./toBits <a negative or positive number to convert> , accept multiple numbers| \n");
+		printf("|-----------------------------------------------------------------------------------|\n");
+		return 0;
+	}
 	int maxLen = 0;
 	for (int i = 1; i < ac ; i++)
 	{
@@ -102,7 +118,6 @@ int main(int ac, char **av)
 			tab(n, maxLen);
 			if (is_neg)
 				n = (-n + UINT_MAX + 1);
-			/*printf("NEW:%ld\n", n);*/
 			convert(n, space);
 			printf("\n");
 		}
