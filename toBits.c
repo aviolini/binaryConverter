@@ -101,7 +101,8 @@ int main(int ac, char **av)
 			printf("%ld]:", n);
 			tab(n, maxLen);
 			if (is_neg)
-				n = INT_MAX - n + 1;
+				n = (-n + UINT_MAX + 1);
+			/*printf("NEW:%ld\n", n);*/
 			convert(n, space);
 			printf("\n");
 		}
