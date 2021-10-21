@@ -9,13 +9,11 @@ RM		=	rm -f
 
 PATHINSTALL = $(HOME)/bin
 
-#VAR		=	'export PATH="$$PATH:$(PATHINSTALL)"'
+KEYWORD	=	\#thisIsTheUtilsBinPath
 
 TEST	=	cat ~/.bashrc | grep 'export PATH="$$PATH:$(PATHINSTALL)"'
 
-#TEST1	=	$(cat ~/.bashrc | grep -n 'export PATH="$$PATH:$(PATHINSTALL)"'| cut -d: -f1)
-
-EXPR	=	 echo 'export PATH="$$PATH:$(PATHINSTALL)"' >> $(HOME)/.bashrc
+EXPR	=	 echo 'export PATH="$$PATH:$(PATHINSTALL)" $(KEYWORD)'  >> $(HOME)/.bashrc
 
 all		:	
 			$(CC) $(CFLAGS) -o randomNum randomNum.c
@@ -44,8 +42,6 @@ uninstall:	fclean
 
 remove	:	uninstall
 			rm -rf $(PATHINSTALL)
-			
-#			$(TEST) && sed -i "${TEST1}d" $(HOME)/.bashrc
-#			rimuovere la riga da bashrc			
+			$(TEST) && sed -i '/$(KEYWORD)/d' $(HOME)/.bashrc || echo -n
 
-./PHONY	:	all re clean fclean
+./PHONY	:	all re clean fclean install uninstall remove
