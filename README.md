@@ -30,10 +30,12 @@
   
   ./toDec 1 11 111 1111 11111 111111 100000
   
-# INSTALL IN YOUR PC
-application binaries will be accessible everywhere - only for bash
+# INSTALL IN YOUR PC:
+only for Linux - only for bash
 
 add application binaries in ~/bin/ and add ~/bin/ path to ~/.bashrc
+
+application binaries will be accessible everywhere
 
 - $make install && source ~/.bashrc
 
@@ -50,6 +52,10 @@ add application binaries in ~/bin/ and add ~/bin/ path to ~/.bashrc
   ./toDec test
   
  # UNINSTALL:
- (remove application binaries from your pc)
+ remove application binaries from your pc
+ 
+ - uninstall-utils.sh
+ 
+   or from repository dir:
  
  - $make uninstall
