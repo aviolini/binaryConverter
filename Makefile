@@ -1,47 +1,50 @@
 
-MYBIN	=	randomNum sizeof toBits toDec
+MYBIN		=	randomNum sizeof toBits toDec
 
-CC		=	gcc
+CC			=	gcc
 
-CFLAGS	=	-Wall -Wextra -Werror
+CFLAGS		=	-Wall -Wextra -Werror
 
-RM		=	rm -f
+RM			=	rm -f
 
-PATHINSTALL = $(HOME)/bin
+BINPATH		=	$(HOME)/bin
 
-KEYWORD	=	\#thisIsTheUtilsBinPath
+UTILSPATH	=	utils
 
-TEST	=	cat ~/.bashrc | grep 'export PATH="$$PATH:$(PATHINSTALL)"'
+KEYWORD		=	\#thisIsTheUtilsBinPath
 
-EXPR	=	 echo 'export PATH="$$PATH:$(PATHINSTALL)" $(KEYWORD)'  >> $(HOME)/.bashrc
+TEST		=	cat ~/.bashrc | grep 'export PATH="$$PATH:$(BINPATH)/$(UTILSPATH)"'
 
-all		:	
-			$(CC) $(CFLAGS) -o randomNum randomNum.c
-			$(CC) $(CFLAGS) -o sizeof sizeof.c
-			$(CC) $(CFLAGS) -o toBits toBits.c
-			$(CC) $(CFLAGS) -o toDec toDec.c
+EXPR		=	echo 'export PATH="$$PATH:$(BINPATH)/$(UTILSPATH)" $(KEYWORD)'  >> $(HOME)/.bashrc
 
-clean	:
-			$(RM) $(MYBIN)
+UNINSTALL	=	$(BINPATH)/$(UTILSPATH)/uninstall-utils.sh
 
-fclean	:	clean
+all			:	
+				$(CC) $(CFLAGS) -o randomNum randomNum.c
+				$(CC) $(CFLAGS) -o sizeof sizeof.c
+				$(CC) $(CFLAGS) -o toBits toBits.c
+				$(CC) $(CFLAGS) -o toDec toDec.c
 
-re		:	fclean all
+clean		:
+				$(RM) $(MYBIN)
 
-install	: 	$(MYBIN)
-			install -d $(PATHINSTALL)
-			install -m 744 $(MYBIN) $(PATHINSTALL)
-			$(TEST) || $(EXPR)
-			$(RM) $(MYBIN)
+fclean		:	clean
 
-uninstall:	fclean
-			$(RM) $(PATHINSTALL)/randomNum
-			$(RM) $(PATHINSTALL)/sizeof
-			$(RM) $(PATHINSTALL)/toBits
-			$(RM) $(PATHINSTALL)/toDec
+re			:	fclean all
 
-remove	:	uninstall
-			rm -rf $(PATHINSTALL)
-			$(TEST) && sed -i '/$(KEYWORD)/d' $(HOME)/.bashrc || echo -n
+install		:	$(MYBIN)
+				install -d $(BINPATH)/$(UTILSPATH)
+				install -m 744 $(MYBIN) $(BINPATH)/$(UTILSPATH)
+				$(TEST) || $(EXPR)
+				$(RM) $(MYBIN)
+				echo '#!/bin/bash' > $(BINPATH)/$(UTILSPATH)/uninstall.sh
+				echo -n 'cat ~/.bashrc | grep '"'"'export PATH="$$PATH:$(BINPATH)/$(UTILSPATH)"'"'" >> $(UNINSTALL)
+				echo '&& sed -i ''/$(KEYWORD)/d'' $(HOME)/.bashrc || echo -n '>> $(UNINSTALL)
+				echo 'rm -rf $(BINPATH)/$(UTILSPATH)' >> $(UNINSTALL)
+				chmod 744 $(UNINSTALL)
 
-./PHONY	:	all re clean fclean install uninstall remove
+uninstall	:	fclean
+				rm -rf $(BINPATH)/$(UTILSPATH)
+				$(TEST) && sed -i '/$(KEYWORD)/d' $(HOME)/.bashrc || echo -n
+
+./PHONY		:	all re clean fclean install uninstall
