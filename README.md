@@ -31,9 +31,11 @@
   ./toDec 1 11 111 1111 11111 111111 100000
   
 # INSTALL IN YOUR PC
-(applications will be accessible everywhere - only for bash)
+application binaries will be accessible everywhere - only for bash
 
-- $make install && source ~/.bashrc  -> install programs in ~/bin and add ~/bin path to ~/.bashrc
+add application binaries in ~/bin/ and add ~/bin/ path to ~/.bashrc
+
+- $make install && source ~/.bashrc
 
 # HELP:
 
@@ -46,3 +48,8 @@
   ./toBits test
   
   ./toDec test
+  
+ # UNINSTALL:
+ (remove application binaries from your pc)
+ 
+ - $make uninstall
