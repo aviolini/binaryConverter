@@ -6,7 +6,7 @@
 /*   By: arrigo <arrigo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 19:15:12 by arrigo            #+#    #+#             */
-/*   Updated: 2021/10/21 19:15:13 by arrigo           ###   ########.fr       */
+/*   Updated: 2021/10/24 23:54:33 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,11 @@ int main(int ac, char **av)
 	{
 		int c = 0;
 		long n = atol(av[i]);
+		if (n < 0)
+		{
+			n *= -1;
+			c++;
+		}
 		for (; n > 0; n /= 10, c++){}
 		if (c > maxLen)
 			maxLen = c;

@@ -6,7 +6,7 @@
 /*   By: arrigo <arrigo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 19:15:33 by arrigo            #+#    #+#             */
-/*   Updated: 2021/10/21 19:15:34 by arrigo           ###   ########.fr       */
+/*   Updated: 2021/10/24 23:48:46 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,13 +74,14 @@ int main(int ac, char **av)
 		int index = len - 1;
 		len += EXTRA_CHARS;
 		printf("[%s]:", av[i]);
-		while ((len>>3) <= (maxLen>>3))				//	=/8
+		int lenCopy = len;
+		while ((len >> 3) <= (maxLen >> 3))				//	=/8
 		{
 			len = len + TAB_SIZE;
 			printf("\t");
 		}
-		if (len > (int)INT + EXTRA_CHARS)
-			printf(" Out of range, limits: %ld bits\n", INT);
+		if (lenCopy > (int)INT + EXTRA_CHARS)
+			printf("Out of range, limits: %ld bits\n", INT);
 		else if (check(av[i]))
 			printf("Bad argument\n");
 		else 
