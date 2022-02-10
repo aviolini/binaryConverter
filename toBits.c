@@ -6,7 +6,7 @@
 /*   By: arrigo <arrigo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 19:15:12 by arrigo            #+#    #+#             */
-/*   Updated: 2021/10/24 23:54:33 by aviolini         ###   ########.fr       */
+/*   Updated: 2022/02/10 11:45:33 by arrigo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,15 @@
 #define EXTRA_CHARS 3
 
 short is_neg;
+
+int help()
+{
+	printf("|-----------------------------------------------------------help-----------------------------|\n");
+	printf("|type: ./converterToBits test to view a simple test converter                                |\n");
+	printf("|type: ./converterToBits <a negative or positive number to convert> , accept multiple numbers|\n");
+	printf("|--------------------------------------------------------------------------------------------|\n");
+	return 0;
+}
 
 int numlen(long n)
 {
@@ -73,6 +82,7 @@ int main(int ac, char **av)
 	if (ac < 2)
 	{
 		printf("Error arguments, enter number/s to converter\n");
+		help();
 		return 1;
 	}
 	if (!strcmp(av[1],"test"))
@@ -84,13 +94,7 @@ int main(int ac, char **av)
 		av = new_av;
 	}
 	if (!strcmp(av[1],"help"))
-	{
-		printf("|-----------------------------------------------------------help--------------------|\n");
-		printf("|type: ./toBits test to view a simple test converter                                |\n");
-		printf("|type: ./toBits <a negative or positive number to convert> , accept multiple numbers| \n");
-		printf("|-----------------------------------------------------------------------------------|\n");
-		return 0;
-	}
+		return help();
 	int maxLen = 0;
 	for (int i = 1; i < ac ; i++)
 	{
@@ -115,8 +119,10 @@ int main(int ac, char **av)
 			printf("[%s]:", av[i]);
 			tab(n, maxLen);
 			printf(" Bad argument\n");
+			help();
+			return (2);
 		}
-		else if ( n > INT_MAX || n < INT_MIN)
+		if ( n > INT_MAX || n < INT_MIN)
 		{
 			printf("[%s]:", av[i]);
 			tab(n, maxLen);

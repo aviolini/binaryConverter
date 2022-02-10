@@ -1,44 +1,52 @@
-**Do it in the console is better than do it in the browser!**
+# binaryConverter
+A CLI application to convert from decimal to binary number and reverse
 
-*DoItInConsole is a collection of useful applications that you can run from the console rather than using the internet browser*
+### DOWNLOAD
+```shell
+git clone git@github.com:aviolini/binaryConverter.git
+```
+```shell
+cd ./binaryConverter
+```
+### INSTALL
+**help installation**
+```shell
+make help
+```
+**locally (the apps can be called only from the project folder)**
+```shell
+make all
+```
+**system (the apps can be called everywhere - only for GNU/Linux system with bash)**
+```shell
+make install
+```
+```shell
+source ~/.bashrc
+```
 
-### APPLICATIONS DESCRIPTION:  
-- randomNum.c:  
-  *return n differrent and random numbers*
+### USAGE
+**locally**
+```shell
+./converterToBits -128 -64 -32 -16 -8 -4 -2 -1 0 1 2 3 4 5 10 100 1000
+```
+```shell
+./converterToDec 1 11 111 1111 11111 111111 100000
+```
+**system**
+```shell
+converterToBits -128 -64 -32 -16 -8 -4 -2 -1 0 1 2 3 4 5 10 100 1000
+```
+```shell
+converterToDec 1 11 111 1111 11111 111111 100000
+```
+### UNINSTALL
 
-- sizeof.c:  
-  *print sizes and limits of c variables*
-
-- toBits.c:  
-  *convert decimal number to binary*
-
-- toDec.c:  
-  *convert binary number to decimal*
-
-### SIMPLE USE:  
-- $make -> make programs in local directory  
-  ./doit_randomNum 100  
-  ./doit_sizeof  
-  ./doit_toBits -128 -64 -32 -16 -8 -4 -2 -1 0 1 2 3 4 5 10 100 1000  
-  ./doit_toDec 1 11 111 1111 11111 111111 100000
-
-### INSTALL IN YOUR PC:  
-__*only for Linux - only for bash*__  
-*add application binaries in ~/bin/ and add ~/bin/ path to ~/.bashrc  
-application binaries will be accessible everywhere*  
-- $make install && source ~/.bashrc
-
-### HELP:  
-  ./doit_toBits help  
-  ./doit_toDec help
-
-### TEST:  
-  ./doit_toBits test  
-  ./doit_toDec test  
-
-### UNINSTALL:  
- *remove application binaries from your pc*  
- - uninstall-utils.sh
-
- *or from repository dir:*  
- - $make uninstall
+**locally**
+ ```shell
+ make clean
+```
+ **system**
+```shell
+ uninstall-binaryConverter.sh
+```
